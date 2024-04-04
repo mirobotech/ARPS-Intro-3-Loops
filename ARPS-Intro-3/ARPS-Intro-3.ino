@@ -1,41 +1,41 @@
  /*
  Project: Intro-3-Loops                 Activity: mirobo.tech/arps-intro-3
- Date:    January 12, 2024
+ Date:    April 3, 2024
  
  This introductory programming activity for the mirobo.tech ARPS circuit
  demonstrates the use of both while-loop and for-loop structures to change
  the brightness of an LED using PWM (Pulse-Width Modulation).
  
- Additional program analysis and programming activities introduce the concepts
- of local and global variables and demonstrate the analogWrite() function to
- generate PWM output.
+ Additional program analysis and programming activities introduce the
+ concepts of local and global variables and demonstrate the analogWrite()
+ function to generate PWM output.
+
+  See the https://mirobo.tech/arps website for more programming activities.
 */
 
-// Define I/O pins used for human interface devices
-const int SW2 = 0;      // ARPS pushbuttons SW2 and SW3 are supported on
-const int SW3 = 1;      // Arduino UNO R4 Minima and Arduino UNO R4 WiFi
-const int SW4 = 2;      // ARPS pushbuttons SW4 and SW5 work on all
-const int SW5 = 3;      // Arduino UNO R3 and Arduino UNO R4 circuit boards
+// Define I/O pins used by ARPS human interface devices
+const int SW2 = 0;      // Pushbuttons SW2 and SW3 are supported on Arduino
+const int SW3 = 1;      // UNO R4 Minima and Arduino UNO R4 WiFi
+const int SW4 = 2;      // Pushbuttons SW4 and SW5 work on all Arduino UNO R3
+const int SW5 = 3;      // and Arduino UNO R4 circuit boards
 
-const int LED2 = 5;     // ARPS top-side LEDs
+const int LED2 = 5;     // ARPS LEDs
 const int LED3 = 6;
 const int LED4 = 9;
 const int LED5 = 10;
 
 const int BEEPER = 11;  // ARPS Piezo beeper LS1
-const int onboardLED = 13;  // Arduino on-board LED
 
 // Define program variables
-int SW2state;
-int SW3state;
-int SW4state;
-int SW5state;
+int SW2State;
+int SW3State;
+int SW4State;
+int SW5State;
 
-int LED2level = 127;  // LED2 brightness (PWM on-time) value
+int LED2Level = 127;  // LED2 brightness (PWM on-time) value
 int pwmCounter;       // Counter for PWM generation loop
 
 void setup() {
-  pinMode(onboardLED,OUTPUT);
   pinMode(SW2,INPUT_PULLUP);
   pinMode(SW3,INPUT_PULLUP);
   pinMode(SW4,INPUT_PULLUP);
@@ -45,28 +45,29 @@ void setup() {
   pinMode(LED4,OUTPUT);
   pinMode(LED5,OUTPUT);
   pinMode(BEEPER,OUTPUT);
+  pinMode(LED_BUILTIN,OUTPUT);
   tone(BEEPER,4000,100);  // Say hello!
 }
 
 void loop() {
   // Read pushbuttons
-  SW4state = digitalRead(SW4);
-  SW5state = digitalRead(SW5);
+  SW4State = digitalRead(SW4);
+  SW5State = digitalRead(SW5);
 
   // Decrease brightness
-  if(SW5state == LOW && LED2level > 0) {
-    LED2level -= 1;
+  if(SW5State == LOW && LED2Level > 0) {
+    LED2Level -= 1;
   }
 
   // Increase brightness
-  if(SW4state == LOW && LED2level < 255) {
-    LED2level += 1;
+  if(SW4State == LOW && LED2Level < 255) {
+    LED2Level += 1;
   }
 
   // PWM LED2
   pwmCounter = 255;
   while(pwmCounter != 0) {
-    if(LED2level == pwmCounter) {
+    if(LED2Level == pwmCounter) {
       digitalWrite(LED2,HIGH);
     }
     pwmCounter --;
@@ -79,12 +80,12 @@ void loop() {
  * 
  * 1.   The main loop of this program starts with program statements that
  *      read two of the circuit's pushbuttons and conditionally modify the
- *      value of the LED2level variable. What range of values do they
- *      allow the LED2level variable to be?
+ *      value of the LED2Level variable. What range of values do they
+ *      allow the LED2Level variable to be?
  * 
- * 2.   The main loop() of this program can be considered an an infinite,
- *      condition-less loop. The while() loop inside the program's main
- *      loop implements a condition, so it should act as a finite loop.
+ * 2.   The main loop() of this program can be considered to be an infinite,
+ *      (condition-less) loop. The while() loop inside the program's main
+ *      loop implements a condition and acts as a finite loop.
  * 
  *      What condition is being evaluated inside the while() statement's
  *      brackets? How many times will the contents of this inner loop run?
@@ -99,7 +100,7 @@ void loop() {
  *
  *      How many levels of brightness can LED D2 have in this program?
  *      Calculate the percentage brightness change corresponding to a single
- *      digit difference in the value of the LED2level variable.
+ *      digit difference in the value of the LED2Level variable.
  * 
  * 5.   A while() loop requires three statements to perform its function:
  * 
@@ -111,29 +112,29 @@ void loop() {
  *      the loop will repeat. The 'while(pwmCounter != 0)' structure keeps 
  *      running the loop until pwmCounter is equal to 0. Unlike 'if'
  *      statements, which run the code inside their conditional braces only
- *      once when the condition is true, while statements keep re-evaluating
- *      their condition and repeating the code inside their braces while the
- *      condition is true.
+ *      once when a condition is true, while statements keep re-evaluating
+ *      their conditions and repeating the code inside their braces while
+ *      their conditions are true.
  * 
- *      3) An expression is needed to modify the variable inside the while()
- *      condition. If the variable is never modified the program will appear
- *      to get stuck in the loop and never go on to run any other code – this
- *      is known as an infinite loop. The statement 'pwmCounter --;' uses a
- *      decrement operator to decrease the value of the loop variable by 1. 
+ *      3) An expression is required to modify the variable inside the while()
+ *      condition. If the variable is never modified, the program will appear
+ *      to get stuck in the loop and will never go on to run any other code –
+ *      this is known as an infinite loop. The statement 'pwmCounter --;' uses
+ *      a decrement operator to decrease the value of the loop variable by 1. 
  *
  *      A for() loop is an alternative to a while() loop and incorporates the
- *      same three parts of a while structure in a single statement. Compare
- *      the structure of the while() loop in the program with the for() loop,
- *      below. What is an advantage of using a for() loop instead of a while()
- *      loop? 
+ *      same three parts of a while structure into a single program statement.
+ *      Compare the structure of the while() loop in the program with the 
+ *      for() loop, below. What is an advantage of using a for() loop instead 
+ *      of a while() loop? 
  *    
  *      Replace the entire while structure in the program with this for() loop:
 
   for(int pwmCounter = 255; pwmCounter != 0; pwmCounter --) {
-    if(LED2level == pwmCounter) {
+    if(LED2Level == pwmCounter) {
       digitalWrite(LED2,HIGH);
     }
-    delayMicroseconds(20);
+    delayMicroseconds(10);
   }
   digitalWrite(LED2,LOW);
         
@@ -142,8 +143,8 @@ void loop() {
  * 
  * 6.   The pwmCounter variable defined in the program's header is known as a 
  *      'global' variable because it is available to all parts of the program.
- *      The for() loop, added above, *redefines* the pwmCounter variable as a
- *      'local' variable just for use within the for() loop using the 
+ *      The for() loop which was added above redefines the pwmCounter variable
+ *      as a 'local' variable just for use within the for() loop using the 
  *      initialization statement: 'for(int pwmCounter = 255; ...'
  * 
  *      While both pwmCounter variables share the same name, they are different,
@@ -151,15 +152,15 @@ void loop() {
  *      the for() loop. As you can imagine, having two different variables with
  *      the same variable name can potentially lead to unexpected problems in 
  *      your program and should always be avoided – we're only doing it here to
- *      prove the point that it can be a problem! Let's see if this is really
- *      the case, or not.
+ *      prove the point that it can be a problem! Let's try to prove that the
+ *      two pwmCounter variable really are different.
  * 
  *      Add the line:
 
   pwmCounter = 128;
 
  *      above the for() loop in your program, and add the following lines below
- *      the for() loop to determine if the global pwmCounter variable will be 
+ *      the for() loop to determine if the global pwmCounter variable is 
  *      modified by the for() loop:
         
   if(pwmCounter == 128) {
@@ -169,11 +170,11 @@ void loop() {
     digitalWrite(LED4,LOW);
   }
         
- *      What value should pwmCounter variable local to the for() loop have
- *      when the loop finishes? Build and upload the program into your
- *      circuit. If LED4 is lit, we know that the global pwmCounter variable 
- *      has not been modified by the for() loop. Do you think your prediction
- *      for the value of the local pwmCounter variable is correct?
+ *      What value should pwmCounter variable that was declared inside the
+ *      for() loop have when the loop finishes? Build and upload the program
+ *      into your circuit. If LED4 is lit, we know that the global pwmCounter
+ *      variable has not been modified by the for() loop. Do you think your
+ *      prediction for the value of the local pwmCounter variable is correct?
  * 
  * 7.   Remove the 'int' declaration from the for() loop statement so that it
  *      now looks like this:
@@ -190,7 +191,7 @@ void loop() {
  *      specifier as shown below:
 
    for(int pwmCtr = 255; pwmCtr != 0; pwmCtr --) {
-    if(LED2level == pwmCtr) {
+    if(LED2Level == pwmCtr) {
       digitalWrite(LED2,HIGH);
     }
     delayMicroseconds(20);
@@ -207,14 +208,15 @@ void loop() {
  *
  * 9.   Arduino includes an analogWrite() instruction that automatically
  *      generates PWM outputs on up to six special purpose digital output
- *      pins – these are usually marked on with a tilde '~' character on
- *      the Arduino I/O headers, representing an analog wave. The inclusion
- *      of this instruction means that all of the previous PWM code can be
- *      replaced with a single analogWrite() statement. Replace all of the
- *      code below the switch input if conditions with these three lines:
+ *      pins – these are usually marked with a tilde '~' character on each
+ *      PWM-capable Arduino I/O header pin (the '~' is meant to represent
+ *      an analog wave). The inclusion of this instruction means that all
+ *      of the previous PWM code can be replaced with a single analogWrite()
+ *      statement. Replace all of the code below the switch input if
+ *      conditions with these three lines:
 
    // PWM LED2
-  analogWrite(LED2,LED2level);
+  analogWrite(LED2,LED2Level);
   delay(10);
 
  *      What purpose does the 'delay(10);' statement serve in this program? 
@@ -222,20 +224,23 @@ void loop() {
  *
  * 10.  All of the work that went into generating and testing our own PWM
  *      algorithm might seem like wasted effort after realizing that that
- *      a single instruction can replace all of our code, but that is not
- *      the case. Developing and testign an algrithm to accomplish a task
- *      is an important skill, and will begood preparation for creating our
- *      own functions for new or un-supported hardware. Our code may even
- *      work more efficiently than pre-made functions which may contain
- *      extra code to support additional features or capabilities that our
- *      program may not need.
+ *      a single instruction can replace all of our code, but that doesn't
+ *      have to be the case. Developing and testing an new algrithm to 
+ *      accomplish a specific task is an important skill, and this exercise
+ *      will hopefully build your understanding of PWM and provide good
+ *      preparation for creating your own functions for new or un-supported
+ *      hardware devices. Our code may even work more efficiently than 
+ *      pre-made functions, which often contain extra code to support
+ *      additional features or capabilities that may not be needed by our
+ *      program.
  *
  *      Look up the analogWrite() instruction in the Arduino reference
  *      documentation. What limitiations does analogWrite() have? Can you
  *      think of any applications that might benefit from different PWM
  *      frequencies, different PWM resolution (the number of distinct
  *      output levels), or more PWM outputs? Could our PWM code algorithm
- *      be modified to overcome some of the limitations in analogWrite()?
+ *      be modified to overcome some of the limitations when using the
+ *      analogWrite() function?
  *
  * Programming Activities
  * 
@@ -252,18 +257,22 @@ void loop() {
  *      wave and calculate the PWM frequency.
  * 
  * 3.   Instead of having an LED turn on at full brightness when a button is
- *      pressed, create a program that uses a for() loop to slowly increase an
- *      LED's brightness when a button is pressed. In addition to gradually
- *      changing light level this could be a useful feature to soft-start an
- *      electric motor, potentially preventing the stresses caused by suddenly
- *      applying full power to a mechanical system. Either add a second button
- *      or use the same button as a toggle button to turn off the LED by
- *      gradually decreasing its output level.
+ *      pressed, create a program that uses a for() loop to automatically
+ *      increase an LED's brightness when a button is pressed one (instead of
+ *      having to hold the up button as in the original program). In addition
+ *      to gradually changing light level this program could be used to
+ *      implement a soft-start capability for an electric motor, to order to
+ *      prevent or reduce the stress caused by suddenly applying full power
+ *      to a mechanical system.
  *
- * 4.   Make a program that automatically creates a repeated, visual 'pulse',
+ * 4.   Either add a second button to the soft-start program, above, to
+ *      gradually turn the LED off by automatically decreasing its output
+ *      level (or use the same start button as a toggle button).
+ *
+ * 5.   Make a program that automatically creates a repeated, visual 'pulse',
  *      by continuously brightening and dimming one or more of the LEDs.
  * 
- * 5.   Try making a 'chirp' or 'pew-pew' sound effect by using a for loop to
+ * 6.   Try making a 'chirp' or 'pew-pew' sound effect by using a for loop to
  *      sweep through a range of frequencies from low to high, or high to low,
  *      in response to a button press.
  */
